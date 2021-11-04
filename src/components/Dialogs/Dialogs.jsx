@@ -1,13 +1,9 @@
 import classes from './Dialogs.module.css'
 import DialogItem from './DialogItem/DialogItem'
 import Message from './Message/Message'
-import {
-  updateMessageActionCreator,
-  addMessageActionCreator,
-} from './../../redux/state'
+import { addMessageActionCreator, updateMessageActionCreator } from '../../redux/messagesReducer'
 
 const Dialogs = (props) => {
-  console.log(props)
   let newDialogElement = props.state.newMessageText
 
   const updateMessage = (e) => {

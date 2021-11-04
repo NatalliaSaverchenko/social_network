@@ -1,16 +1,6 @@
-const ADD_POST='ADD_POST'
-const UPDATE_NEW_POST_TEXT='UPDATE_NEW_POST_TEXT'
-
-const ADD_MESSAGE='ADD_MESSAGE'
-const UPDATE_MESSAGE='UPDATE_MESSAGE'
-
-export const addPostActionCreator = () => ({type: ADD_POST})
-export const updateNewPostTextActionCreator = (text) => ({type: UPDATE_NEW_POST_TEXT, newPostText: text})
-
-export const addMessageActionCreator = () => ({type: ADD_MESSAGE})
-export const updateMessageActionCreator = (message) => ({type: UPDATE_MESSAGE, newMessageText: message})
-
-
+import messagesReducer from "./messagesReducer";
+import profileReducer from './profileReducer';
+import sidebarReducer from "./sidebarReducer ";
 
 let store = {
   _state: {
@@ -34,6 +24,7 @@ let store = {
       ],
       newMessageText: ''
     },
+    sidebar: {}
   },
   getState () {
     return this._state
@@ -63,35 +54,11 @@ let store = {
   },
   
   dispatch (action) {
-    if (action.type===ADD_POST) {
-      let newPost = {
-        id: this._state.profilePage.postsData.length+1,
-        message: this._state.profilePage.newPostText,
-        likesCount: 0,
-      }
-      this._state.profilePage.postsData.push(newPost)
-      this._state.profilePage.newPostText=''
-      this._callSubscriber(this._state)
-    }
-    if (action.type===UPDATE_NEW_POST_TEXT) {
-      this._state.profilePage.newPostText = action.newPostText
-    this._callSubscriber(this._state)    
-  }
-  if (action.type===ADD_MESSAGE) {
-    
-    let newMessage = {
-      id: this._state.messagesPage.messagesData.length+1,
-      message: this._state.messagesPage.newMessageText,
-    }
-    this._state.messagesPage.messagesData.push(newMessage)
-    this._state.messagesPage.newMessageText=''
+    this._state.profilePage=profileReducer(this._state.profilePage, action)
+    this._state.messagesPage=messagesReducer(this._state.messagesPage, action)
+    this._state.sidebar=sidebarReducer(this._state.sidebar, action)
     this._callSubscriber(this._state)
-  }
-  if (action.type===UPDATE_MESSAGE) {
-  
-    this._state.messagesPage.newMessageText = action.newMessageText
-  this._callSubscriber(this._state)    
-}
+
   }
 }
 export default store
